@@ -1,15 +1,20 @@
+package View;
+
+
+import Controller.GuiArea;
+import Model.Canvas;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Dimension2D;
 
 /**
- * Created by SPARK on 2016-02-20.
+ * Created by SPARK on 2016-02-27.
  */
-public class WestBoxLayout extends DemoPanel {
+public class WestBoxLayout extends JPanel {
 
 
     public static GuiArea guiArea;//
@@ -17,6 +22,7 @@ public class WestBoxLayout extends DemoPanel {
     // Using struts and glue
     public WestBoxLayout() {
         super();
+        this.setBackground(Color.gray);
         //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         //this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -40,13 +46,22 @@ public class WestBoxLayout extends DemoPanel {
         setClear.setForeground(Color.black);
         setClear.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                DrawArea.g2.setPaint(Color.white);
+                Canvas.g2.setPaint(Color.white);
+                System.out.println("Clear Button Pressed");
                 // draw white on entire draw area to clear
-                DrawArea.g2.fillRect(0, 0, EastBoxLayout.drawArea.getSize().width,
+/*
+                Canvas.g2.fillRect(0, 0, EastBoxLayout.drawArea.getSize().width,
                         EastBoxLayout.drawArea.getSize().height);
                 //DrawArea.g2.setPaint(Color.black);
-                DrawArea.g2.setPaint(GuiArea.lineColor);
+                Canvas.g2.setPaint(Canvas.lineColor);
                 EastBoxLayout.drawArea.repaint();
+*/
+                Canvas.g2.fillRect(0, 0, Canvas.theWidth, Canvas.theHeight);
+                //DrawArea.g2.setPaint(Color.black);
+                Canvas.g2.setPaint(Canvas.lineColor);
+
+                Canvas.drawArea.repaint();
+                //DrawArea.repaint();
 
             }
         });
@@ -78,16 +93,16 @@ public class WestBoxLayout extends DemoPanel {
                 guiArea.backColor = Color.white;
                 guiArea.g2.setColor(guiArea.backColor);
                 guiArea.g2.fillRect(0,0,126,126);
-                guiArea.lineColor = lineColor;
-                guiArea.g2.setPaint(guiArea.lineColor);
-                guiArea.g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                        DrawArea.strokeThickness,DrawArea.strokeThickness);
+                Canvas.lineColor = lineColor;
+                guiArea.g2.setPaint(Canvas.lineColor);
+                guiArea.g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
+                        Canvas.strokeThickness,Canvas.strokeThickness);
 
 
 
 
 
-                DrawArea.g2.setPaint(lineColor);
+                Canvas.g2.setPaint(lineColor);
                 if (lineColor != null) lineColor = Color.black;
             }
         });
@@ -98,7 +113,7 @@ public class WestBoxLayout extends DemoPanel {
 
 
 
-        JSlider theStroke = new JSlider(0, 50, DrawArea.strokeThickness);
+        JSlider theStroke = new JSlider(0, 50, Canvas.strokeThickness);
         theStroke.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -112,7 +127,7 @@ public class WestBoxLayout extends DemoPanel {
                     JSlider theJSlider = (JSlider) source;
                     if (!theJSlider.getValueIsAdjusting()) {
                         System.out.println("Slider changed: " + theJSlider.getValue());
-                        DrawArea.strokeThickness = theJSlider.getValue();
+                        Canvas.strokeThickness = theJSlider.getValue();
                     }
                 } else {
                     System.out.println("Something changed: " + source);
@@ -139,7 +154,8 @@ public class WestBoxLayout extends DemoPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Eraser Pressed");
 
-                GuiArea.lineColor = Color.white;
+                Canvas.lineColor = Color.white;
+                guiArea.backColor = Color.black;
                 /*
                 GuiArea.g2.setPaint(Color.black);
                 GuiArea.g2.fillRect(0, 0, 126, 126);
@@ -150,7 +166,7 @@ public class WestBoxLayout extends DemoPanel {
                 guiArea.eraser();
 
 
-                DrawArea.g2.setPaint(GuiArea.lineColor);
+                Canvas.g2.setPaint(Canvas.lineColor);
                 //DrawArea.g2.setPaint(Color.white);
                 // Problem: This causes Thickness of Stroke to be strictly changed to 20.
                 // DrawArea.strokeThickness = 20;
@@ -172,7 +188,7 @@ public class WestBoxLayout extends DemoPanel {
                 guiArea.repaint();
                 guiArea.red();
 
-                DrawArea.g2.setPaint(Color.red);
+                Canvas.g2.setPaint(Color.red);
             }
         });
         this.add(setRed);
@@ -191,7 +207,7 @@ public class WestBoxLayout extends DemoPanel {
                 guiArea.repaint();
                 guiArea.blue();
 
-                DrawArea.g2.setPaint(Color.blue);
+                Canvas.g2.setPaint(Color.blue);
             }
         });
         this.add(setBlue);
@@ -209,7 +225,7 @@ public class WestBoxLayout extends DemoPanel {
                 guiArea.repaint();
                 guiArea.green();
 
-                DrawArea.g2.setPaint(Color.green);
+                Canvas.g2.setPaint(Color.green);
             }
         });
         this.add(setGreen);
@@ -227,7 +243,7 @@ public class WestBoxLayout extends DemoPanel {
                 guiArea.repaint();
                 guiArea.yellow();
 
-                DrawArea.g2.setPaint(Color.yellow);
+                Canvas.g2.setPaint(Color.yellow);
 
                 /*
                 guiArea.g2.setPaint(guiArea.lineColor);

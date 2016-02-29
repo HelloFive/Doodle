@@ -1,3 +1,7 @@
+package Controller;
+
+import Model.Canvas;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -5,8 +9,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 /**
- * Created by SPARK on 2016-02-23.
+ * Created by SPARK on 2016-02-28.
  */
+
 public class GuiArea extends JComponent {
 
     // Image in which we're going to draw
@@ -15,11 +20,11 @@ public class GuiArea extends JComponent {
     // Graphics2d object --> used to draw on
     public static Graphics2D g2;
 
-    public static int strokeThickness = 0;
+    //public static int strokeThickness = 0;
 
 
     public static Color backColor;
-    public static Color lineColor;
+    //public static Color lineColor;
 
     // Mouse coordinates
     private int currentX, currentY, oldX, oldY, firstX, firstY, baseX, baseY;
@@ -47,42 +52,21 @@ public class GuiArea extends JComponent {
                 System.out.println("oldX = " + oldX + ", oldY = " + oldY);
 
                 if (e.getClickCount() == 2) {
-                    lineColor = JColorChooser.showDialog(null, "Choose a Color", Color.black);
-                    DrawArea.g2.setPaint(lineColor);
+                    Canvas.lineColor = JColorChooser.showDialog(null, "Choose a Color", Color.black);
+                    Canvas.g2.setPaint(Canvas.lineColor);
 
                     repaint();
                     backColor = Color.white;
                     g2.setColor(backColor);
                     g2.fillRect(0,0,126,126);
-                    g2.setPaint(lineColor);
-                    g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                            DrawArea.strokeThickness,DrawArea.strokeThickness);
+                    g2.setPaint(Canvas.lineColor);
+                    g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
+                            Canvas.strokeThickness, Canvas.strokeThickness);
 
                 }
             }
         });
 
-/*
-        addMouseListener(new MouseAdapter() {
-
-            public void mouseReleased(MouseEvent e) {
-                // save coord x,y when mouse is pressed
-                if ((currentX==firstX)&&(currentY==firstY)) {
-                    currentX = e.getX();
-                    currentY = e.getY();
-
-                    System.out.println("currentX = " + currentX + ", currentY = " + currentY);
-
-                    lineColor = JColorChooser.showDialog(null, "Choose a Color", Color.black);
-                    DrawArea.g2.setPaint(lineColor);
-
-
-                    clear();
-                    repaint();
-                }
-            }
-        });
-*/
 
         addMouseMotionListener(new MouseMotionAdapter() {
 
@@ -93,33 +77,33 @@ public class GuiArea extends JComponent {
                 System.out.println("currentX = " + currentX + ", currentY = " + currentY);
 
 
-                if (g2 != null) {
-                    if ((DrawArea.strokeThickness <= 100) && (DrawArea.strokeThickness >= 0)) {
+                if (Canvas.g2 != null) {
+                    if ((Canvas.strokeThickness <= 100) && (Canvas.strokeThickness >= 0)) {
                         if ( (currentX < 126) && (currentY < 126)) {
                             if (currentY-oldY < 0) {
                                 //System.out.println("DrawArea.strokeThickness -= " + Math.sqrt((currentX - baseX) ^ 2 - (currentY - baseY) ^ 2));
                                 //DrawArea.strokeThickness -= Math.sqrt((currentX - baseX) ^ 2 - (currentY - baseY) ^ 2);
-                                System.out.println("DrawArea.strokeThickness += " + (currentY - oldY));
-                                DrawArea.strokeThickness += (currentY - oldY);
+                                System.out.println("Canvas.strokeThickness += " + (currentY - oldY));
+                                Canvas.strokeThickness += (currentY - oldY);
 
-                                if (DrawArea.strokeThickness < 0) {
-                                    System.out.println("   DrawArea.strokeThickness is less than 0");
-                                    DrawArea.strokeThickness = 0;
+                                if (Canvas.strokeThickness < 0) {
+                                    System.out.println("   Canvas.strokeThickness is less than 0");
+                                    Canvas.strokeThickness = 0;
                                 }
-                                System.out.println("DrawArea.strokeThickness = " + DrawArea.strokeThickness);
+                                System.out.println("Canvas.strokeThickness = " + Canvas.strokeThickness);
 
 
                             } else {
                                 //System.out.println("DrawArea.strokeThickness += " + Math.sqrt((currentX - baseX) ^ 2 - (currentY - baseY) ^ 2));
                                 //DrawArea.strokeThickness += Math.sqrt((currentX - baseX) ^ 2 - (currentY - baseY) ^ 2);
-                                System.out.println("DrawArea.strokeThickness += " + (currentY - oldY));
-                                DrawArea.strokeThickness += (currentY - oldY);
+                                System.out.println("Canvas.strokeThickness += " + (currentY - oldY));
+                                Canvas.strokeThickness += (currentY - oldY);
 
-                                if (DrawArea.strokeThickness > 100) {
-                                    System.out.println("   DrawArea.strokeThickness is greater than 100");
-                                    DrawArea.strokeThickness = 100;
+                                if (Canvas.strokeThickness > 100) {
+                                    System.out.println("   Canvas.strokeThickness is greater than 100");
+                                    Canvas.strokeThickness = 100;
                                 }
-                                System.out.println("DrawArea.strokeThickness = " + DrawArea.strokeThickness);
+                                System.out.println("Canvas.strokeThickness = " + Canvas.strokeThickness);
                             }
                         }
                     }
@@ -135,13 +119,13 @@ public class GuiArea extends JComponent {
                     // refresh gui area to repaint
                     repaint();
 
-                    System.out.println("   current lineColor = " + lineColor);
+                    System.out.println("   current Canvas.lineColor = " + Canvas.lineColor);
 
                     g2.setPaint(backColor);
                     g2.fillRect(0,0,126,126);
-                    g2.setColor(lineColor);
-                    g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                            DrawArea.strokeThickness,DrawArea.strokeThickness);
+                    g2.setColor(Canvas.lineColor);
+                    g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
+                            Canvas.strokeThickness,Canvas.strokeThickness);
 
                 }
             }
@@ -166,8 +150,8 @@ public class GuiArea extends JComponent {
             backColor = Color.white;
             g2.setPaint(backColor);
             g2.fillRect(0, 0, 126, 126); //g2.fillRect(0, 0, getSize().width, getSize().height);
-            lineColor = Color.black;
-            g2.setPaint(lineColor);
+            Canvas.lineColor = Color.black;
+            g2.setPaint(Canvas.lineColor);
             repaint();
 
             //g2.fillOval(63-(DrawArea.strokeThickness+50)/2,63-(DrawArea.strokeThickness+50)/2,
@@ -176,8 +160,8 @@ public class GuiArea extends JComponent {
 
         g.drawImage(image, 0, 0, null);
 
-        g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                DrawArea.strokeThickness,DrawArea.strokeThickness);
+        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
+                Canvas.strokeThickness,Canvas.strokeThickness);
 
 
 
@@ -202,47 +186,47 @@ public class GuiArea extends JComponent {
         backColor = Color.black;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        lineColor = Color.white;
-        g2.setPaint(lineColor);
-        g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                DrawArea.strokeThickness,DrawArea.strokeThickness);
+        Canvas.lineColor = Color.white;
+        g2.setPaint(Canvas.lineColor);
+        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
+                Canvas.strokeThickness,Canvas.strokeThickness);
     }
 
     public void red() {
         backColor = Color.white;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        lineColor = Color.red;
-        g2.setPaint(lineColor);
-        g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                DrawArea.strokeThickness,DrawArea.strokeThickness);
+        Canvas.lineColor = Color.red;
+        g2.setPaint(Canvas.lineColor);
+        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
+                Canvas.strokeThickness,Canvas.strokeThickness);
     }
     public void blue() {
         backColor = Color.white;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        lineColor = Color.blue;
-        g2.setPaint(lineColor);
-        g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                DrawArea.strokeThickness,DrawArea.strokeThickness);
+        Canvas.lineColor = Color.blue;
+        g2.setPaint(Canvas.lineColor);
+        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
+                Canvas.strokeThickness,Canvas.strokeThickness);
     }
     public void green() {
         backColor = Color.white;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        lineColor = Color.green;
-        g2.setPaint(lineColor);
-        g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                DrawArea.strokeThickness,DrawArea.strokeThickness);
+        Canvas.lineColor = Color.green;
+        g2.setPaint(Canvas.lineColor);
+        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
+                Canvas.strokeThickness,Canvas.strokeThickness);
     }
     public void yellow() {
         backColor = Color.white;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        lineColor = Color.yellow;
-        g2.setPaint(lineColor);
-        g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                DrawArea.strokeThickness,DrawArea.strokeThickness);
+        Canvas.lineColor = Color.yellow;
+        g2.setPaint(Canvas.lineColor);
+        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
+                Canvas.strokeThickness,Canvas.strokeThickness);
     }
 
 }
