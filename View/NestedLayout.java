@@ -5,13 +5,21 @@ import Model.Canvas;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Observer;
 
 /**
  * Created by SPARK on 2016-02-28.
  */
-public class NestedLayout extends JPanel {
+public class NestedLayout extends JPanel  implements Observer {
 
-    private Canvas model;
+
+    @Override
+    public void update(java.util.Observable obs, Object x) {
+        repaint();
+        System.out.println("update(" + obs + "," + x + ");");
+    }
+
+    //private Canvas model;
 
     public NestedLayout() {
         super();
@@ -19,7 +27,7 @@ public class NestedLayout extends JPanel {
         JPanel north = new NorthBoxLayout();
         JPanel east = new EastBoxLayout();
         JPanel west = new WestBoxLayout();
-        JPanel south = new SouthBoxLayout(model);
+        JPanel south = new SouthBoxLayout();
 
         north.setBorder(BorderFactory.createTitledBorder(""));
         //east.setBorder(BorderFactory.createTitledBorder(""));

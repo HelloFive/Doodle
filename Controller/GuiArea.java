@@ -7,12 +7,20 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.Observer;
 
 /**
  * Created by SPARK on 2016-02-28.
  */
 
-public class GuiArea extends JComponent {
+public class GuiArea extends JComponent implements Observer {
+
+
+    @Override
+    public void update(java.util.Observable obs, Object x) {
+        repaint();
+        System.out.println("update(" + obs + "," + x + ");");
+    }
 
     // Image in which we're going to draw
     private Image image;

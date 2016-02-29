@@ -5,21 +5,43 @@ import View.SouthBoxLayout;
 
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.Observer;
 
 /**
  * Created by SPARK on 2016-02-28.
  */
 
-public class DrawArea extends JComponent {
+public class DrawArea extends JComponent  implements Observer {
+
+
+
+/*
+    private class MaxStateController implements ChangeListener {
+        public void stateChanged(ChangeEvent e) {
+            Canvas.increaseMaxState();
+        }
+    }
+*/
+
+
+
+    @Override
+    public void update(java.util.Observable obs, Object x) {
+        repaint();
+        System.out.println("update(" + obs + "," + x + ");");
+    }
 
     // Mouse coordinates
     private int currentX, currentY, oldX, oldY;
 
     public DrawArea() {
+
         setDoubleBuffered(false);
         addMouseListener(new MouseAdapter() {
 
@@ -43,7 +65,7 @@ public class DrawArea extends JComponent {
 
                 Canvas.SaveLines(new Point(e.getX(), e.getY()));
 
-                SouthBoxLayout.stateSlider = new JSlider(0, (int) Canvas.MAX_STATE, Canvas.CURRENT_STATE/(Canvas.MAX_STATE+1));
+//                SouthBoxLayout.stateSlider = new JSlider(0, (int) Canvas.MAX_STATE, Canvas.CURRENT_STATE/(Canvas.MAX_STATE+1));
 
                 /*
                 From[i].x = oldX;
@@ -103,7 +125,7 @@ public class DrawArea extends JComponent {
 
                     Canvas.SaveLines(new Point(e.getX(), e.getY()));
 
-                    SouthBoxLayout.stateSlider = new JSlider(0, (int) Canvas.MAX_STATE, Canvas.CURRENT_STATE/(Canvas.MAX_STATE+1));
+//                    SouthBoxLayout.stateSlider = new JSlider(0, (int) Canvas.MAX_STATE, Canvas.CURRENT_STATE/(Canvas.MAX_STATE+1));
 
 
                     // store current corrds x,y as olds x,y

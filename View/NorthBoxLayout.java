@@ -13,11 +13,19 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Observer;
 
 /**
  * Created by SPARK on 2016-02-27.
  */
-public class NorthBoxLayout extends JPanel{
+public class NorthBoxLayout extends JPanel implements Observer {
+
+
+    @Override
+    public void update(java.util.Observable obs, Object x) {
+        repaint();
+        System.out.println("update(" + obs + "," + x + ");");
+    }
 
     public NorthBoxLayout() {
         super();

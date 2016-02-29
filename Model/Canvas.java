@@ -16,6 +16,17 @@ import java.util.Observable;
 public class Canvas extends Observable {
 
 
+    public void changeSomething() {
+        setChanged();
+        notifyObservers();
+        System.out.println("Canvas Model Updated.");
+    }
+
+
+    public Canvas() {
+
+    }
+
     public static DrawArea drawArea = new DrawArea();
 
     public static Color lineColor;
@@ -48,7 +59,8 @@ public class Canvas extends Observable {
 
 
     public static boolean isRunning = false;
-    public static boolean isPaused = false;
+    public static int isPaused = 0;
+    public static boolean isReversed = false;
     public static long lastUpdate;
     public static int FPS = 35;
 
@@ -61,13 +73,8 @@ public class Canvas extends Observable {
         Times.add(MAX_STATE, System.nanoTime());
         //if (MAX_STATE == 1) Times.set(0,Times.get(1));
         MAX_STATE++;
-        SouthBoxLayout.stateSlider.setValue(Canvas.CURRENT_STATE/(Canvas.MAX_STATE+1));
-    }
+        //SouthBoxLayout.stateSlider.setValue(Canvas.CURRENT_STATE/(Canvas.MAX_STATE+1));
 
-
-    public void update() {
-        setChanged();
-        notifyObservers();
     }
 
 
@@ -101,6 +108,9 @@ public class Canvas extends Observable {
     public static ArrayList<Long> Times = new ArrayList<Long>();
 */
 
+    public static void setCurrentState(int state) {
+        CURRENT_STATE = state;
+    }
 
     public int getMaxState() {
         return this.MAX_STATE;
@@ -111,6 +121,11 @@ public class Canvas extends Observable {
     }
     public int getAimState() {
         return this.AIM_STATE;
+    }
+
+
+    public static void increaseMaxState(){
+        MAX_STATE++;
     }
 
 
