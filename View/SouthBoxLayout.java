@@ -2,7 +2,7 @@ package View;
 
 import Model.Canvas;
 import Model.iView;
-import javafx.beans.Observable;
+//import javafx.beans.Observable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -66,7 +66,7 @@ public class SouthBoxLayout extends JPanel implements Observer {
                             }
                         }
                     }
-                }, 100, 100);
+                }, 50, 50);
 
             }
         });

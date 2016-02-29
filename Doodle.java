@@ -15,11 +15,9 @@ import java.awt.*;
  */
 public class Doodle extends JPanel {
     public static void main(String[] args) {
-        // These are stacked bottom to top, so put the first one
-        // to be discussed last.
-        JFrame Doodle = new LayoutFrame("NestedLayout", new NestedLayout());
-        //new LayoutFrame("BorderLayout", new DemoBorderLayout());
+        JFrame Doodle = new LayoutFrame("Doodle", new NestedLayout());
         Doodle.setLocationRelativeTo(null);
-        Doodle.setMinimumSize(new Dimension(540, 360));
+        Doodle.setMinimumSize(new Dimension(720, 480));
+        Doodle.setMaximumSize(new Dimension(1080, 720));
     }
 }

@@ -44,8 +44,8 @@ public class NorthBoxLayout extends JPanel implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                BufferedImage image = new BufferedImage(Canvas.theWidth,
-                        Canvas.theHeight, BufferedImage.TYPE_INT_ARGB);
+                BufferedImage image = new BufferedImage(Canvas.getWidth(),
+                        Canvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
                 Graphics2D g2 = image.createGraphics();
                 g2.drawImage(Canvas.image, 0, 0, null);
@@ -91,7 +91,7 @@ public class NorthBoxLayout extends JPanel implements Observer {
 
 
                     File f = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                    BufferedImage image = new BufferedImage(Canvas.theWidth, Canvas.theHeight, BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage image = new BufferedImage(Canvas.getWidth(), Canvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
                     try {
                         image = ImageIO.read(f);
                     } catch (IOException exception) {

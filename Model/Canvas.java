@@ -27,15 +27,19 @@ public class Canvas extends Observable {
 
     }
 
+
+    public static Dimension screenSize = new Dimension(1080, 720);
+
+
     public static DrawArea drawArea = new DrawArea();
 
-    public static Color lineColor;
-    public static int strokeThickness = 30;
+    private static Color lineColor;
+    private static int strokeThickness = 30;
 
     public static Image image;
 
-    public static int theWidth;
-    public static int theHeight;
+    private static int theWidth;
+    private static int theHeight;
 
 
     public static ArrayList<Point> Points = new ArrayList<Point>();
@@ -63,6 +67,8 @@ public class Canvas extends Observable {
     public static boolean isReversed = false;
     public static long lastUpdate;
     public static int FPS = 35;
+    public static boolean isSpring = false;
+    public static int countSpring = 0;
 
 
 
@@ -78,28 +84,45 @@ public class Canvas extends Observable {
     }
 
 
-    public DrawArea getDrawArea() {
+    public  DrawArea getDrawArea() {
         return this.drawArea;
     }
 
-    public Color getColor() {
-        return this.lineColor;
+    public static Color getColor() {
+        return lineColor;
     }
 
-    public int getStroke() {
-        return this.strokeThickness;
+    public static int getStroke() {
+        return strokeThickness;
     }
 
-    public Image getImage() {
+    public  Image getImage() {
         return this.image;
     }
 
-    public int getWidth() {
-        return this.theWidth;
+    public static int getWidth() {
+        return theWidth;
     }
-    public int getHeight() {
-        return this.theHeight;
+    public static int getHeight() {
+        return theHeight;
     }
+
+    public static void setWidth(int width) {
+        theWidth = width;
+    }
+    public static void setHeight(int height) {
+        theHeight = height;
+    }
+
+
+    public static void setColor(Color theColor) {
+        lineColor = theColor;
+    }
+
+    public static void setStrokeThickness (int stroke) {
+        strokeThickness = stroke;
+    }
+
 
 /*
     public static ArrayList<Point> Points = new ArrayList<Point>();

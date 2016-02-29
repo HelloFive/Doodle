@@ -1,18 +1,22 @@
-# super simple makefile
-# call it using 'make NAME=name_of_code_file_without_extension'
-# (assumes a .java extension)
 NAME = "Doodle"
 
 all:
 	@echo "Compiling..."
-	javac *.java model/*.java view/*.java controller/*.java
+	#javac a2/*.java a2/Model/*.java a2/View/*.java a2/Controller/*.java
+	javac *.java Model/*.java View/*.java Controller/*.java
 
 run: all
 	@echo "Running..."
-	java Doodle
+	#java a2/$(NAME)
+	java $(NAME)
 
 clean:
+	#rm -rf a2/*.class
+	#rm -rf a2/Model/*/*.class
+	#rm -rf a2/View/*/*.class
+	#rm -rf a2/Controller/*/*.class
+
 	rm -rf *.class
-	rm -rf view/*.class
-	rm -rf model/*.class
-	rm -rf controller/*.class
+	rm -rf Model/*.class
+	rm -rf View/*.class
+	rm -rf Controller/*.class

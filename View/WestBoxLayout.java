@@ -10,35 +10,37 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observer;
 
 /**
  * Created by SPARK on 2016-02-27.
  */
-public class WestBoxLayout extends JPanel {
+public class WestBoxLayout extends JPanel implements Observer {
 
 
     public static GuiArea guiArea;//
+
+    private JSlider theStroke = new JSlider(JSlider.HORIZONTAL, 0, 50, Canvas.getStroke());
+
+
+    private class theStrokeController implements ChangeListener {
+        public void stateChanged (ChangeEvent e) {
+            int stroke = theStroke.getValue();
+            Canvas.setStrokeThickness(stroke);
+        }
+    }
+
 
     // Using struts and glue
     public WestBoxLayout() {
         super();
         this.setBackground(Color.gray);
-        //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        //this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         guiArea = new GuiArea(); // GuiArea
         this.add(guiArea, BorderLayout.CENTER);
 
-        //guiArea.setMinimumSize(new Dimension(126,126));
-        //guiArea.setMaximumSize(new Dimension(126,126));
-
-        //guiArea.setResizable(false);
-        //this.setResizable(false);
-
-
-        //this.add(guiArea); //, BoxLayout.X_AXIS);
-        //this.add(Box.createRigidArea(new Dimension(66,66)));
 
 
         JButton setClear = new JButton("Clear");
@@ -48,38 +50,35 @@ public class WestBoxLayout extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 Canvas.g2.setPaint(Color.white);
                 System.out.println("Clear Button Pressed");
-                // draw white on entire draw area to clear
-/*
-                Canvas.g2.fillRect(0, 0, EastBoxLayout.drawArea.getSize().width,
-                        EastBoxLayout.drawArea.getSize().height);
-                //DrawArea.g2.setPaint(Color.black);
-                Canvas.g2.setPaint(Canvas.lineColor);
-                EastBoxLayout.drawArea.repaint();
-*/
-                Canvas.g2.fillRect(0, 0, Canvas.theWidth, Canvas.theHeight);
-                //DrawArea.g2.setPaint(Color.black);
-                Canvas.g2.setPaint(Canvas.lineColor);
+
+                Canvas.g2.fillRect(0, 0, Canvas.getWidth(), Canvas.getHeight());
+                Canvas.g2.setPaint(Canvas.getColor());
 
                 Canvas.drawArea.repaint();
-                //DrawArea.repaint();
 
             }
         });
         this.add(setClear);
 
-/*
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawOval(0,0,50,50);
-        }
-        @Override
-        public Dimension getPreferredSize() {
-            return new Dimension(100,100);
-        }
-*/
+
+        JButton setEraser = new JButton("Eraser");
+        setEraser.setBackground(Color.black);
+        //setEraser.setForeground(Color.black);
+        setEraser.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Eraser Pressed");
+
+                Canvas.setColor(Color.white);//); = Color.white;
+                guiArea.backColor = Color.black;
+
+                guiArea.repaint();
+                guiArea.eraser();
 
 
-
+                Canvas.g2.setPaint(Canvas.getColor());
+            }
+        });
+        this.add(setEraser);
 
 
         JButton colorPalette = new JButton("Color Palette");
@@ -93,10 +92,10 @@ public class WestBoxLayout extends JPanel {
                 guiArea.backColor = Color.white;
                 guiArea.g2.setColor(guiArea.backColor);
                 guiArea.g2.fillRect(0,0,126,126);
-                Canvas.lineColor = lineColor;
-                guiArea.g2.setPaint(Canvas.lineColor);
-                guiArea.g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
-                        Canvas.strokeThickness,Canvas.strokeThickness);
+                Canvas.setColor(lineColor);// = lineColor;
+                guiArea.g2.setPaint(Canvas.getColor());
+                guiArea.g2.fillOval(63-(Canvas.getStroke())/2,63-(Canvas.getStroke())/2,
+                        Canvas.getStroke(),Canvas.getStroke());
 
 
 
@@ -109,35 +108,19 @@ public class WestBoxLayout extends JPanel {
         this.add(colorPalette);
 
 
+        JButton springButton = new JButton("Spring");
+        springButton.setBackground(Color.black);
+        //springButton.setForeground(Color.black);
+        springButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Yellow Pressed");
+                if (Canvas.countSpring%2 == 0) Canvas.isSpring = true;
+                else Canvas.isSpring = false;
 
-
-
-
-        JSlider theStroke = new JSlider(0, 50, Canvas.strokeThickness);
-        theStroke.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                Object source = e.getSource();
-                if (source instanceof BoundedRangeModel) {
-                    BoundedRangeModel aModel = (BoundedRangeModel) source;
-                    if (!aModel.getValueIsAdjusting()) {
-                        System.out.println("Changed: " + aModel.getValue());
-                    }
-                } else if (source instanceof JSlider) {
-                    JSlider theJSlider = (JSlider) source;
-                    if (!theJSlider.getValueIsAdjusting()) {
-                        System.out.println("Slider changed: " + theJSlider.getValue());
-                        Canvas.strokeThickness = theJSlider.getValue();
-                    }
-                } else {
-                    System.out.println("Something changed: " + source);
-                }
+                Canvas.countSpring++;
             }
         });
-
-        this.add(new JLabel("Thickness"));
-        this.add(theStroke);
-
+        this.add(springButton);
 
 
         //this.add(Box.createVerticalGlue());
@@ -147,33 +130,6 @@ public class WestBoxLayout extends JPanel {
         //this.add(Box.createVerticalStrut(63));
         //this.add(Box.createHorizontalStrut(63));
 
-        JButton setEraser = new JButton("Eraser");
-        setEraser.setBackground(Color.black);
-        setEraser.setForeground(Color.black);
-        setEraser.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Eraser Pressed");
-
-                Canvas.lineColor = Color.white;
-                guiArea.backColor = Color.black;
-                /*
-                GuiArea.g2.setPaint(Color.black);
-                GuiArea.g2.fillRect(0, 0, 126, 126);
-                 */
-
-                //GuiArea.eraser();
-                guiArea.repaint();
-                guiArea.eraser();
-
-
-                Canvas.g2.setPaint(Canvas.lineColor);
-                //DrawArea.g2.setPaint(Color.white);
-                // Problem: This causes Thickness of Stroke to be strictly changed to 20.
-                // DrawArea.strokeThickness = 20;
-            }
-        });
-        this.add(setEraser);
-
 
         JButton setRed = new JButton("Red");
         setRed.setBackground(Color.red);
@@ -181,9 +137,6 @@ public class WestBoxLayout extends JPanel {
         setRed.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Red Pressed");
-                /*
-                GuiArea.lineColor = Color.RED;
-                 */
 
                 guiArea.repaint();
                 guiArea.red();
@@ -199,10 +152,6 @@ public class WestBoxLayout extends JPanel {
         setBlue.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Blue Pressed");
-                /*
-                GuiArea.lineColor = Color.blue;
-                 */
-
 
                 guiArea.repaint();
                 guiArea.blue();
@@ -218,9 +167,6 @@ public class WestBoxLayout extends JPanel {
         setGreen.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Green Pressed");
-                /*
-                GuiArea.lineColor = Color.green;
-                 */
 
                 guiArea.repaint();
                 guiArea.green();
@@ -236,24 +182,80 @@ public class WestBoxLayout extends JPanel {
         setYellow.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Yellow Pressed");
-                /*
-                GuiArea.lineColor = Color.yellow;
-                 */
 
                 guiArea.repaint();
                 guiArea.yellow();
 
                 Canvas.g2.setPaint(Color.yellow);
-
-                /*
-                guiArea.g2.setPaint(guiArea.lineColor);
-
-                guiArea.g2.fillOval(63-(DrawArea.strokeThickness)/2,63-(DrawArea.strokeThickness)/2,
-                        DrawArea.strokeThickness,DrawArea.strokeThickness);
-                 */
             }
         });
         //setYellow.setSize(5,5);
         this.add(setYellow);
+
+
+
+
+        theStroke.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                Object source = e.getSource();
+                if (source instanceof BoundedRangeModel) {
+                    BoundedRangeModel aModel = (BoundedRangeModel) source;
+                    if (!aModel.getValueIsAdjusting()) {
+                        System.out.println("Changed: " + aModel.getValue());
+                    }
+                } else if (source instanceof JSlider) {
+                    JSlider theJSlider = (JSlider) source;
+                    if (!theJSlider.getValueIsAdjusting()) {
+                        System.out.println("Slider changed: " + theJSlider.getValue());
+                        Canvas.setStrokeThickness(theJSlider.getValue());// = theJSlider.getValue();
+                    }
+                } else {
+                    System.out.println("Something changed: " + source);
+                }
+            }
+        });
+        theStroke.setPreferredSize(new Dimension(100, 20));
+
+
+        this.theStroke.addChangeListener(new theStrokeController());
+
+        theStroke.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                Object source = e.getSource();
+                if (source instanceof BoundedRangeModel) {
+                    BoundedRangeModel aModel = (BoundedRangeModel) source;
+                    if (!aModel.getValueIsAdjusting()) {
+                        System.out.println("Changed: " + aModel.getValue());
+                    }
+                } else if (source instanceof JSlider) {
+                    JSlider theStroke = (JSlider) source;
+                    if (!theStroke.getValueIsAdjusting()) {
+                        Canvas.setStrokeThickness(theStroke.getValue());// = theStroke.getValue();
+                        //System.out.println("AIM_STATE changed to " + stateSlider.getValue());
+                        //System.out.println("Canvas.AIM_STATE:  " + Canvas.AIM_STATE);
+
+                        if(Canvas.getStroke() > 50) Canvas.setStrokeThickness(50);// = 50;
+                        //System.out.println("Canvas.MAX_STATE = " + Canvas.MAX_STATE);
+                        //System.out.println("Canvas.CURRENT_STATE = " + Canvas.CURRENT_STATE);
+
+                    }
+                } else {
+                    System.out.println("Something changed: " + source);
+                }
+            }
+        });
+        this.add(new JLabel("Thickness"));
+        this.add(theStroke);
+
+
     }
+
+    @Override
+    public void update(java.util.Observable obs, Object x) {
+        repaint();
+        System.out.println("update(" + obs + "," + x + ");");
+    }
+
 }

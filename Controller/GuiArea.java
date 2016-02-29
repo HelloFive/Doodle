@@ -16,11 +16,7 @@ import java.util.Observer;
 public class GuiArea extends JComponent implements Observer {
 
 
-    @Override
-    public void update(java.util.Observable obs, Object x) {
-        repaint();
-        System.out.println("update(" + obs + "," + x + ");");
-    }
+
 
     // Image in which we're going to draw
     private Image image;
@@ -38,6 +34,7 @@ public class GuiArea extends JComponent implements Observer {
     private int currentX, currentY, oldX, oldY, firstX, firstY, baseX, baseY;
 
     public GuiArea() {
+
         setDoubleBuffered(false);
         setMinimumSize(new Dimension(126,126));
         setMaximumSize(new Dimension(126,126));
@@ -49,7 +46,6 @@ public class GuiArea extends JComponent implements Observer {
 
 
         addMouseListener(new MouseAdapter() {
-
             public void mousePressed(MouseEvent e) {
                 // save coord x,y when mouse is pressed
                 firstX = e.getX();
@@ -60,16 +56,16 @@ public class GuiArea extends JComponent implements Observer {
                 System.out.println("oldX = " + oldX + ", oldY = " + oldY);
 
                 if (e.getClickCount() == 2) {
-                    Canvas.lineColor = JColorChooser.showDialog(null, "Choose a Color", Color.black);
-                    Canvas.g2.setPaint(Canvas.lineColor);
+                    Canvas.setColor(JColorChooser.showDialog(null, "Choose a Color", Color.black));
+                    Canvas.g2.setPaint(Canvas.getColor());
 
                     repaint();
                     backColor = Color.white;
                     g2.setColor(backColor);
                     g2.fillRect(0,0,126,126);
-                    g2.setPaint(Canvas.lineColor);
-                    g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
-                            Canvas.strokeThickness, Canvas.strokeThickness);
+                    g2.setPaint(Canvas.getColor());
+                    g2.fillOval(63-(Canvas.getStroke())/2,63-(Canvas.getStroke())/2,
+                            Canvas.getStroke(), Canvas.getStroke());
 
                 }
             }
@@ -86,54 +82,48 @@ public class GuiArea extends JComponent implements Observer {
 
 
                 if (Canvas.g2 != null) {
-                    if ((Canvas.strokeThickness <= 100) && (Canvas.strokeThickness >= 0)) {
+                    if ((Canvas.getStroke() <= 100) && (Canvas.getStroke() >= 0)) {
                         if ( (currentX < 126) && (currentY < 126)) {
                             if (currentY-oldY < 0) {
-                                //System.out.println("DrawArea.strokeThickness -= " + Math.sqrt((currentX - baseX) ^ 2 - (currentY - baseY) ^ 2));
-                                //DrawArea.strokeThickness -= Math.sqrt((currentX - baseX) ^ 2 - (currentY - baseY) ^ 2);
                                 System.out.println("Canvas.strokeThickness += " + (currentY - oldY));
-                                Canvas.strokeThickness += (currentY - oldY);
+                                //Canvas.strokeThickness += (currentY - oldY);
+                                Canvas.setStrokeThickness(Canvas.getStroke()+currentY-oldY);
 
-                                if (Canvas.strokeThickness < 0) {
+                                if (Canvas.getStroke() < 0) {
                                     System.out.println("   Canvas.strokeThickness is less than 0");
-                                    Canvas.strokeThickness = 0;
+                                    Canvas.setStrokeThickness(0);
                                 }
-                                System.out.println("Canvas.strokeThickness = " + Canvas.strokeThickness);
+                                System.out.println("Canvas.strokeThickness = " + Canvas.getStroke());
 
 
                             } else {
-                                //System.out.println("DrawArea.strokeThickness += " + Math.sqrt((currentX - baseX) ^ 2 - (currentY - baseY) ^ 2));
-                                //DrawArea.strokeThickness += Math.sqrt((currentX - baseX) ^ 2 - (currentY - baseY) ^ 2);
                                 System.out.println("Canvas.strokeThickness += " + (currentY - oldY));
-                                Canvas.strokeThickness += (currentY - oldY);
+                                //Canvas.strokeThickness += (currentY - oldY);
+                                Canvas.setStrokeThickness(Canvas.getStroke()+currentY-oldY);
 
-                                if (Canvas.strokeThickness > 100) {
+                                if (Canvas.getStroke() > 100) {
                                     System.out.println("   Canvas.strokeThickness is greater than 100");
-                                    Canvas.strokeThickness = 100;
+                                    Canvas.setStrokeThickness(100);// = 100;
                                 }
-                                System.out.println("Canvas.strokeThickness = " + Canvas.strokeThickness);
+                                System.out.println("Canvas.strokeThickness = " + Canvas.getStroke());
                             }
                         }
                     }
-
-                    //g2.fillOval(getSize().width/2,getSize().height/2,DrawArea.strokeThickness+100,DrawArea.strokeThickness+100);
 
                     // store current corrds x,y as olds x,y
                     oldX = currentX;
                     oldY = currentY;
 
-                    //clear();
-
                     // refresh gui area to repaint
                     repaint();
 
-                    System.out.println("   current Canvas.lineColor = " + Canvas.lineColor);
+                    System.out.println("   current Canvas.lineColor = " + Canvas.getColor());
 
                     g2.setPaint(backColor);
                     g2.fillRect(0,0,126,126);
-                    g2.setColor(Canvas.lineColor);
-                    g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
-                            Canvas.strokeThickness,Canvas.strokeThickness);
+                    g2.setColor(Canvas.getColor());
+                    g2.fillOval(63-(Canvas.getStroke())/2,63-(Canvas.getStroke())/2,
+                            Canvas.getStroke(),Canvas.getStroke());
 
                 }
             }
@@ -148,32 +138,21 @@ public class GuiArea extends JComponent implements Observer {
             g2 = (Graphics2D) image.getGraphics();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            //g2.fillOval(63-(DrawArea.strokeThickness+50)/2,63-(DrawArea.strokeThickness+50)/2,
-            //        DrawArea.strokeThickness,DrawArea.strokeThickness);
 
-            //g2.setPaint(lineColor);
-
-            // clear draw area
-            //clear();
             backColor = Color.white;
             g2.setPaint(backColor);
             g2.fillRect(0, 0, 126, 126); //g2.fillRect(0, 0, getSize().width, getSize().height);
-            Canvas.lineColor = Color.black;
-            g2.setPaint(Canvas.lineColor);
+            Canvas.setColor(Color.black);
+            g2.setPaint(Canvas.getColor());
             repaint();
 
-            //g2.fillOval(63-(DrawArea.strokeThickness+50)/2,63-(DrawArea.strokeThickness+50)/2,
-            //        DrawArea.strokeThickness,DrawArea.strokeThickness);
         }
 
         g.drawImage(image, 0, 0, null);
 
-        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
-                Canvas.strokeThickness,Canvas.strokeThickness);
+        g2.fillOval(63-(Canvas.getStroke())/2,63-(Canvas.getStroke())/2,
+                Canvas.getStroke(),Canvas.getStroke());
 
-
-
-        //g2.fillOval(getSize().width/2,getSize().height/2,DrawArea.strokeThickness,DrawArea.strokeThickness);
 
     }
 /*
@@ -194,47 +173,53 @@ public class GuiArea extends JComponent implements Observer {
         backColor = Color.black;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        Canvas.lineColor = Color.white;
-        g2.setPaint(Canvas.lineColor);
-        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
-                Canvas.strokeThickness,Canvas.strokeThickness);
+        Canvas.setColor(Color.white);// = Color.white;
+        g2.setPaint(Canvas.getColor());
+        g2.fillOval(63-(Canvas.getStroke())/2,63-(Canvas.getStroke())/2,
+                Canvas.getStroke(),Canvas.getStroke());
     }
 
     public void red() {
         backColor = Color.white;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        Canvas.lineColor = Color.red;
-        g2.setPaint(Canvas.lineColor);
-        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
-                Canvas.strokeThickness,Canvas.strokeThickness);
+        Canvas.setColor(Color.red);// = Color.red;
+        g2.setPaint(Canvas.getColor());
+        g2.fillOval(63-(Canvas.getStroke())/2,63-(Canvas.getStroke())/2,
+                Canvas.getStroke(),Canvas.getStroke());
     }
     public void blue() {
         backColor = Color.white;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        Canvas.lineColor = Color.blue;
-        g2.setPaint(Canvas.lineColor);
-        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
-                Canvas.strokeThickness,Canvas.strokeThickness);
+        Canvas.setColor(Color.blue);// = Color.blue;
+        g2.setPaint(Canvas.getColor());
+        g2.fillOval(63-(Canvas.getStroke())/2,63-(Canvas.getStroke())/2,
+                Canvas.getStroke(),Canvas.getStroke());
     }
     public void green() {
         backColor = Color.white;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        Canvas.lineColor = Color.green;
-        g2.setPaint(Canvas.lineColor);
-        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
-                Canvas.strokeThickness,Canvas.strokeThickness);
+        Canvas.setColor(Color.green);// = Color.green;
+        g2.setPaint(Canvas.getColor());
+        g2.fillOval(63-(Canvas.getStroke())/2,63-(Canvas.getStroke())/2,
+                Canvas.getStroke(),Canvas.getStroke());
     }
     public void yellow() {
         backColor = Color.white;
         g2.setPaint(backColor);
         g2.fillRect(0, 0, 126, 126);
-        Canvas.lineColor = Color.yellow;
-        g2.setPaint(Canvas.lineColor);
-        g2.fillOval(63-(Canvas.strokeThickness)/2,63-(Canvas.strokeThickness)/2,
-                Canvas.strokeThickness,Canvas.strokeThickness);
+        Canvas.setColor(Color.yellow);// = Color.yellow;
+        g2.setPaint(Canvas.getColor());
+        g2.fillOval(63-(Canvas.getStroke())/2,63-(Canvas.getStroke())/2,
+                Canvas.getStroke(),Canvas.getStroke());
     }
 
+
+    @Override
+    public void update(java.util.Observable obs, Object x) {
+        repaint();
+        System.out.println("update(" + obs + "," + x + ");");
+    }
 }
